@@ -4,15 +4,167 @@
  * See: https://www.gatsbyjs.com/docs/reference/config-files/gatsby-node/
  */
 
+const path = require("path")
+
 /**
  * @type {import('gatsby').GatsbyNode['createPages']}
  */
-exports.createPages = async ({ actions }) => {
+exports.createPages = async ({ graphql, actions, reporter }) => {
   const { createPage } = actions
-  createPage({
-    path: "/using-dsg",
-    component: require.resolve("./src/templates/using-dsg.js"),
-    context: {},
-    defer: true,
+
+  // Templates
+  const postTemplate = path.resolve(`./src/templates/post.js`)
+  const noticiaTemplate = path.resolve(`./src/templates/noticia.js`)
+  const projetoTemplate = path.resolve(`./src/templates/projeto.js`)
+
+  // Query para posts
+  const postsResult = await graphql(`
+    query {
+      allMarkdownRemark(
+        filter: { fileAbsolutePath: { regex: "/posts/" } }
+        sort: { frontmatter: { date: DESC } }
+      ) {
+        nodes {
+          id
+          frontmatter {
+            title
+          }
+          fields {
+            slug
+          }
+        }
+      }
+    }
+  `)
+
+  // Query para notícias
+  const noticiasResult = await graphql(`
+    query {
+      allMarkdownRemark(
+        filter: { fileAbsolutePath: { regex: "/noticias/" } }
+        sort: { frontmatter: { date: DESC } }
+      ) {
+        nodes {
+          id
+          frontmatter {
+            title
+          }
+          fields {
+            slug
+          }
+        }
+      }
+    }
+  `)
+
+  // Query para projetos
+  const projetosResult = await graphql(`
+    query {
+      allMarkdownRemark(
+        filter: { fileAbsolutePath: { regex: "/projetos/" } }
+        sort: { frontmatter: { date: DESC } }
+      ) {
+        nodes {
+          id
+          frontmatter {
+            title
+          }
+          fields {
+            slug
+          }
+        }
+      }
+    }
+  `)
+
+  if (postsResult.errors) {
+    reporter.panicOnBuild(`Erro ao buscar posts`, postsResult.errors)
+    return
+  }
+
+  if (noticiasResult.errors) {
+    reporter.panicOnBuild(`Erro ao buscar notícias`, noticiasResult.errors)
+    return
+  }
+
+  if (projetosResult.errors) {
+    reporter.panicOnBuild(`Erro ao buscar projetos`, projetosResult.errors)
+    return
+  }
+
+  const posts = postsResult.data.allMarkdownRemark.nodes
+  const noticias = noticiasResult.data.allMarkdownRemark.nodes
+  const projetos = projetosResult.data.allMarkdownRemark.nodes
+
+  // Criar páginas para posts
+  posts.forEach((node) => {
+    const slug = node.fields?.slug || 
+      node.frontmatter.title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '')
+
+    createPage({
+      path: `/posts/${slug}`,
+      component: postTemplate,
+      context: {
+        id: node.id,
+      },
+    })
   })
+
+  // Criar páginas para notícias
+  noticias.forEach((node) => {
+    const slug = node.fields?.slug || 
+      node.frontmatter.title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '')
+
+    createPage({
+      path: `/noticias/${slug}`,
+      component: noticiaTemplate,
+      context: {
+        id: node.id,
+      },
+    })
+  })
+
+  // Criar páginas para projetos
+  projetos.forEach((node) => {
+    const slug = node.fields?.slug || 
+      node.frontmatter.title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '')
+
+    createPage({
+      path: `/projetos/${slug}`,
+      component: projetoTemplate,
+      context: {
+        id: node.id,
+      },
+    })
+  })
+}
+
+/**
+ * Cria campos slug a partir do nome do arquivo
+ */
+exports.onCreateNode = ({ node, actions, getNode }) => {
+  const { createNodeField } = actions
+
+  if (node.internal.type === `MarkdownRemark`) {
+    const fileNode = getNode(node.parent)
+    const filePath = fileNode.relativePath
+    
+    // Extrair o nome do arquivo sem extensão
+    const fileName = filePath.replace(/\.[^/.]+$/, '')
+    
+    createNodeField({
+      node,
+      name: `slug`,
+      value: fileName,
+    })
+  }
 }

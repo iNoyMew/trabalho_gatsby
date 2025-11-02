@@ -1,0 +1,125 @@
+/* Pages Styles (Cardápio, Eventos, Receitas) */
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.page-title {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #333;
+  border-bottom: 3px solid #c92a2a;
+  padding-bottom: 0.5rem;
+}
+
+.page-posts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.page-post-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  padding: 1.5rem;
+}
+
+.page-post-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.page-post-title {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+}
+
+.page-post-title a {
+  color: #333;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.page-post-title a:hover {
+  color: #c92a2a;
+}
+
+.page-post-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 0.75rem;
+}
+
+.page-post-category {
+  background: #c92a2a;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+}
+
+.page-post-price {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #c92a2a;
+  margin-top: 0.5rem;
+}
+
+.page-post-excerpt {
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.page-post-link {
+  display: inline-block;
+  color: #c92a2a;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.page-post-link:hover {
+  color: #a61e1e;
+  text-decoration: underline;
+}
+
+.page-empty-state {
+  text-align: center;
+  color: #666;
+  padding: 2rem;
+  font-style: italic;
+}
+
+.tech-badges-container {
+  margin-bottom: 0.75rem;
+}
+
+.tech-badge-small {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  background: #e0e0e0;
+  color: #333;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  margin-right: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+@media (max-width: 768px) {
+  .page-posts-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+

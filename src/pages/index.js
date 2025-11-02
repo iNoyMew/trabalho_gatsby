@@ -1,127 +1,173 @@
 import * as React from "react"
-import { Link } from "gatsby"
+import { graphql, Link } from "gatsby"
 import { StaticImage } from "gatsby-plugin-image"
 
 import Layout from "../components/layout"
 import Seo from "../components/seo"
-import * as styles from "../components/index.module.css"
+import "../styles/home.css"
 
-const links = [
-  {
-    text: "Tutorial",
-    url: "https://www.gatsbyjs.com/docs/tutorial",
-    description:
-      "A great place to get started if you're new to web development. Designed to guide you through setting up your first Gatsby site.",
-  },
-  {
-    text: "Examples",
-    url: "https://github.com/gatsbyjs/gatsby/tree/master/examples",
-    description:
-      "A collection of websites ranging from very basic to complex/complete that illustrate how to accomplish specific tasks within your Gatsby sites.",
-  },
-  {
-    text: "Plugin Library",
-    url: "https://www.gatsbyjs.com/plugins",
-    description:
-      "Learn how to add functionality and customize your Gatsby site or app with thousands of plugins built by our amazing developer community.",
-  },
-  {
-    text: "Build and Host",
-    url: "https://www.gatsbyjs.com/cloud",
-    description:
-      "Now you’re ready to show the world! Give your Gatsby site superpowers: Build and host on Gatsby Cloud. Get started for free!",
-  },
-]
+const IndexPage = ({ data }) => {
+  // Verificação de segurança caso data seja undefined
+  if (!data || !data.posts || !data.noticias || !data.projetos) {
+    return (
+      <Layout>
+        <section className="hero">
+          <h1>Bem-vindo ao Meu Site Gatsby</h1>
+          <p>Carregando conteúdo...</p>
+        </section>
+      </Layout>
+    )
+  }
 
-const samplePageLinks = [
-  {
-    text: "Page 2",
-    url: "page-2",
-    badge: false,
-    description:
-      "A simple example of linking to another page within a Gatsby site",
-  },
-  { text: "TypeScript", url: "using-typescript" },
-  { text: "Server Side Rendering", url: "using-ssr" },
-  { text: "Deferred Static Generation", url: "using-dsg" },
-]
+  const posts = data.posts.nodes || []
+  const noticias = data.noticias.nodes || []
+  const projetos = data.projetos.nodes || []
 
-const moreLinks = [
-  {
-    text: "Documentation",
-    url: "https://gatsbyjs.com/docs/",
-  },
-  {
-    text: "Starters",
-    url: "https://gatsbyjs.com/starters/",
-  },
-  {
-    text: "Showcase",
-    url: "https://gatsbyjs.com/showcase/",
-  },
-  {
-    text: "Contributing",
-    url: "https://www.gatsbyjs.com/contributing/",
-  },
-  { text: "Issues", url: "https://github.com/gatsbyjs/gatsby/issues" },
-]
+  // Combinar todos os conteúdos e ordenar por data
+  const allContent = [
+    ...posts.map(p => ({ ...p, type: 'post', basePath: '/posts' })),
+    ...noticias.map(n => ({ ...n, type: 'noticia', basePath: '/noticias' })),
+    ...projetos.map(pr => ({ ...pr, type: 'projeto', basePath: '/projetos' })),
+  ]
+    .sort((a, b) => new Date(b.frontmatter.date) - new Date(a.frontmatter.date))
+    .slice(0, 20) // Últimos 20
 
-const utmParameters = `?utm_source=starter&utm_medium=start-page&utm_campaign=default-starter`
+  const getSlug = (node) => {
+    return node.fields?.slug || 
+      node.frontmatter.title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '')
+  }
 
-const IndexPage = () => (
-  <Layout>
-    <div className={styles.textCenter}>
-      <StaticImage
-        src="../images/example.png"
-        loading="eager"
-        width={64}
-        quality={95}
-        formats={["auto", "webp", "avif"]}
-        alt=""
-        style={{ marginBottom: `var(--space-3)` }}
-      />
-      <h1>
-        Welcome to <b>Gatsby!</b>
-      </h1>
-      <p className={styles.intro}>
-        <b>Example pages:</b>{" "}
-        {samplePageLinks.map((link, i) => (
-          <React.Fragment key={link.url}>
-            <Link to={link.url}>{link.text}</Link>
-            {i !== samplePageLinks.length - 1 && <> · </>}
-          </React.Fragment>
-        ))}
-        <br />
-        Edit <code>src/pages/index.js</code> to update this page.
-      </p>
-    </div>
-    <ul className={styles.list}>
-      {links.map(link => (
-        <li key={link.url} className={styles.listItem}>
-          <a
-            className={styles.listItemLink}
-            href={`${link.url}${utmParameters}`}
-          >
-            {link.text} ↗
-          </a>
-          <p className={styles.listItemDescription}>{link.description}</p>
-        </li>
-      ))}
-    </ul>
-    {moreLinks.map((link, i) => (
-      <React.Fragment key={link.url}>
-        <a href={`${link.url}${utmParameters}`}>{link.text}</a>
-        {i !== moreLinks.length - 1 && <> · </>}
-      </React.Fragment>
-    ))}
-  </Layout>
+  return (
+    <Layout>
+      <section className="hero">
+        <StaticImage
+          src="../images/gatsby-icon.png"
+          alt="Sabor & Arte Logo"
+          width={100}
+          height={100}
+          className="hero-image"
+          placeholder="blurred"
+          formats={["auto", "webp", "avif"]}
+        />
+        <h1>Bem-vindo ao Sabor & Arte</h1>
+        <p>
+          Descubra uma experiência gastronômica única. Explore nosso cardápio,
+          participe de nossos eventos e aprenda receitas especiais.
+        </p>
+      </section>
+
+      <section className="content-section">
+        <h2 className="section-title">Destaques</h2>
+        {allContent.length > 0 ? (
+          <div className="posts-grid">
+            {allContent.map((node) => {
+              const slug = getSlug(node)
+              const link = `${node.basePath}/${slug}`
+
+              return (
+                <article key={node.id} className="post-card">
+                  <div className="post-content">
+                    <div className="post-meta">
+                      <span>
+                        {new Date(node.frontmatter.date).toLocaleDateString("pt-BR")}
+                      </span>
+                      {node.frontmatter.category && (
+                        <span className="post-category">{node.frontmatter.category}</span>
+                      )}
+                    </div>
+                    <h3 className="post-title">
+                      <Link to={link}>{node.frontmatter.title}</Link>
+                    </h3>
+                    {node.frontmatter.preco && (
+                      <div className="post-price">{node.frontmatter.preco}</div>
+                    )}
+                    {node.excerpt && (
+                      <p className="post-excerpt">{node.excerpt}</p>
+                    )}
+                    <Link to={link} className="post-link">Ver detalhes →</Link>
+                  </div>
+                </article>
+              )
+            })}
+          </div>
+        ) : (
+          <p className="empty-state">Nenhum conteúdo disponível ainda.</p>
+        )}
+      </section>
+    </Layout>
+  )
+}
+
+export const Head = () => (
+  <Seo
+    title="Início"
+    description="Restaurante Sabor & Arte - Cardápio, eventos e receitas especiais"
+  />
 )
 
-/**
- * Head export to define metadata for the page
- *
- * See: https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-head/
- */
-export const Head = () => <Seo title="Home" />
-
 export default IndexPage
+
+export const query = graphql`
+  query {
+    posts: allMarkdownRemark(
+      filter: { fileAbsolutePath: { regex: "/posts/" } }
+      sort: { frontmatter: { date: DESC } }
+      limit: 20
+    ) {
+      nodes {
+        id
+        excerpt(pruneLength: 160)
+        fields {
+          slug
+        }
+        frontmatter {
+          title
+          date
+          category
+          preco
+        }
+      }
+    }
+    noticias: allMarkdownRemark(
+      filter: { fileAbsolutePath: { regex: "/noticias/" } }
+      sort: { frontmatter: { date: DESC } }
+      limit: 20
+    ) {
+      nodes {
+        id
+        excerpt(pruneLength: 160)
+        fields {
+          slug
+        }
+        frontmatter {
+          title
+          date
+          category
+          preco
+        }
+      }
+    }
+    projetos: allMarkdownRemark(
+      filter: { fileAbsolutePath: { regex: "/projetos/" } }
+      sort: { frontmatter: { date: DESC } }
+      limit: 20
+    ) {
+      nodes {
+        id
+        excerpt(pruneLength: 160)
+        fields {
+          slug
+        }
+        frontmatter {
+          title
+          date
+          category
+          preco
+        }
+      }
+    }
+  }
+`

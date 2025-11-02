@@ -1,0 +1,126 @@
+/* Template Styles (Post, Noticia, Projeto) */
+.template-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.template-header {
+  margin-bottom: 2rem;
+}
+
+.template-title {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.template-meta {
+  display: flex;
+  gap: 1rem;
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.template-price {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #c92a2a;
+  margin-top: 1rem;
+}
+
+.tech-badges {
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.tech-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background: #c92a2a;
+  color: white;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.template-content {
+  line-height: 1.8;
+  color: #333;
+}
+
+.template-content h2 {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: #c92a2a;
+}
+
+.template-content h3 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  color: #a61e1e;
+}
+
+.template-content p {
+  margin-bottom: 1rem;
+}
+
+.template-content code {
+  background: #f4f4f4;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+.template-content pre {
+  background: #f4f4f4;
+  padding: 1rem;
+  border-radius: 4px;
+  overflow-x: auto;
+  margin-bottom: 1rem;
+}
+
+.template-content a {
+  color: #c92a2a;
+  text-decoration: none;
+}
+
+.template-content a:hover {
+  text-decoration: underline;
+}
+
+.template-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.back-link {
+  display: inline-block;
+  margin-top: 2rem;
+  padding: 0.5rem 1rem;
+  background: #c92a2a;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.back-link:hover {
+  background: #a61e1e;
+}
+
+@media (max-width: 768px) {
+  .template-container {
+    padding: 1rem;
+  }
+
+  .template-title {
+    font-size: 2rem;
+  }
+}
+
