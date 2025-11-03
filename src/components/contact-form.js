@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../styles/contact.css";
+import { navigate } from "gatsby";
 
 export default function ContactForm() {
   const [values, setValues] = useState({ name: "", email: "", message: "" });
@@ -25,16 +25,37 @@ export default function ContactForm() {
     setErrors({ ...errors, [e.target.name]: undefined });
   };
 
-  const handleSubmit = (e) => {
+  const encode = (data) =>
+    Object.keys(data)
+      .map(
+        (key) => encodeURIComponent(key) + "=" + encodeURIComponent(data[key])
+      )
+      .join("&");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     const errs = validate();
     if (Object.keys(errs).length > 0) {
-      e.preventDefault(); // bloqueia envio para Netlify se houver erro
       setErrors(errs);
       return;
     }
-    // se válido, deixa o formulário submeter normalmente (Netlify Forms processará)
+
     setSubmitting(true);
-    // não chamar fetch/axios aqui; o envio padrão do formulário é usado
+
+    // Tenta enviar para Netlify Forms (funciona em produção no Netlify).
+    try {
+      await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: encode({ "form-name": "contact", ...values }),
+      });
+    } catch (err) {
+      // ignore: falha local não impede o redirecionamento para /thanks
+      console.warn("Envio falhou (provavelmente em localhost):", err);
+    }
+
+    // Navega para a página de agradecimento no cliente
+    navigate("/thanks");
   };
 
   return (
@@ -43,18 +64,13 @@ export default function ContactForm() {
       method="POST"
       data-netlify="true"
       data-netlify-honeypot="bot-field"
-      action="/thanks"
       onSubmit={handleSubmit}
       className="contact-form"
     >
-      {/* Campo necessário para Netlify identificar o form */}
       <input type="hidden" name="form-name" value="contact" />
-
-      {/* Honeypot anti-bot */}
       <p style={{ display: "none" }}>
         <label>
-          Não preencha este campo:{" "}
-          <input name="bot-field" onChange={handleChange} />
+          Não preencha este campo: <input name="bot-field" onChange={handleChange} />
         </label>
       </p>
 

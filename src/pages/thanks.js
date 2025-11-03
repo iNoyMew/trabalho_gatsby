@@ -1,4 +1,5 @@
 import * as React from "react";
+
 export default function Thanks() {
   return (
     <main style={{ padding: "2rem", textAlign: "center" }}>
