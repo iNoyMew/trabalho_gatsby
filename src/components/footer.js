@@ -3,7 +3,7 @@ import { Link } from "gatsby"
 import "../styles/footer.css"
 
 const Footer = () => {
-  const currentYear = new Date().getFullYear()
+  const anoAtual = new Date().getFullYear()
 
   return (
     <footer className="footer-container">
@@ -48,10 +48,7 @@ const Footer = () => {
         </div>
       </div>
       <div className="footer-copyright">
-        © {currentYear} &middot; Construído com{" "}
-        <a href="https://www.gatsbyjs.com" target="_blank" rel="noopener noreferrer">
-          Gatsby
-        </a>
+        © {anoAtual} &middot; Todos os direitos reservados &middot;
       </div>
     </footer>
   )
