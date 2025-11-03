@@ -8,7 +8,7 @@ preco: "R$ 24,00"
 
 # Torta de Limão Siciliano
 
-![Torta de Limão Siciliano](../../images/gatsby-icon.png)
+![Torta de Limão Siciliano](../../images/torta.jpeg)
 
 A sobremesa perfeita para finalizar sua refeição. Cremosa, refrescante e com sabor equilibrado.
 

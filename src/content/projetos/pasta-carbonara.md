@@ -10,7 +10,7 @@ dificuldade: "Média"
 
 # Pasta Carbonara Autêntica
 
-![Pasta Carbonara](../../images/example.png)
+![Pasta Carbonara](../../images/pasta.jpeg)
 
 A receita tradicional italiana de carbonara, sem creme de leite! Aprenda o segredo dos verdadeiros mestres da cozinha italiana.
 

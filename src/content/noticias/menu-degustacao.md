@@ -7,7 +7,7 @@ category: "Eventos"
 
 # Menu Degustação de Outono
 
-![Menu Degustação](../../images/gatsby-icon2.png)
+![Menu Degustação](../../images/menu.jpeg)
 
 Aproveite os sabores da estação com nosso menu degustação exclusivo, criado especialmente para celebrar o outono.
 

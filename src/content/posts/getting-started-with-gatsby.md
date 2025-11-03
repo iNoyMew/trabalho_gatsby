@@ -8,7 +8,7 @@ preco: "R$ 32,00"
 
 # Bruschetta Tradicional
 
-![Bruschetta Tradicional](../../images/gatsby-icon2.png)
+![Bruschetta Tradicional](../../images/bruschetta.jpeg)
 
 Uma entrada clássica da culinária italiana que combina simplicidade e sabor autêntico.
 

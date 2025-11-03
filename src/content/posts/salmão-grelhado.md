@@ -10,7 +10,7 @@ preco: "R$ 68,00"
 
 Um prato refinado que combina o sabor suave do salmão com um blend especial de ervas frescas.
 
-![Salmão Grelhado](../../images/example.png)
+![Salmão Grelhado](../../images/salmao.jpeg)
 
 ## Ingredientes
 

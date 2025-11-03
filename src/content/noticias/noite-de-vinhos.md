@@ -7,7 +7,7 @@ category: "Eventos"
 
 # Noite de Vinhos e Queijos
 
-![Noite de Vinhos](../../images/example.png)
+![Noite de Vinhos](../../images/noite.jpeg)
 
 Junte-se a nós para uma experiência única de harmonização entre vinhos selecionados e queijos artesanais.
 

@@ -8,7 +8,7 @@ preco: "R$ 52,00"
 
 # Risotto ai Funghi Porcini
 
-![Risotto ai Funghi Porcini](../../images/example.png)
+![Risotto ai Funghi Porcini](../../images/risoto.jpeg)
 
 Um clássico italiano preparado com a técnica tradicional, resultando em um risotto cremoso e saboroso.
 

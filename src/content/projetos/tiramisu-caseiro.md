@@ -10,7 +10,7 @@ dificuldade: "Fácil"
 
 # Tiramisu Caseiro
 
-![Tiramisu Caseiro](../../images/gatsby-icon.png)
+![Tiramisu Caseiro](../../images/tiramisu.jpeg)
 
 A sobremesa italiana mais famosa, feita em casa com ingredientes de qualidade. Doce, cremoso e irresistível!
 

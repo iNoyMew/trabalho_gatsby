@@ -8,7 +8,7 @@ preco: "R$ 89,00"
 
 # Filet Mignon ao Molho de Vinho
 
-![Filet Mignon](../../images/gatsby-icon.png)
+![Filet Mignon](../../images/filet.jpeg)
 
 Um prato sofisticado que celebra a culinária francesa clássica.
 

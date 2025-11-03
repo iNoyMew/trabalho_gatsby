@@ -8,7 +8,7 @@ preco: "R$ 28,00"
 
 # Creme Brulee
 
-![Creme Brulee](../../images/gatsby-icon2.png)
+![Creme Brulee](../../images/creme.jpeg)
 
 A sobremesa francesa mais elegante e sofisticada, com textura cremosa e crosta de açúcar caramelizado.
 
