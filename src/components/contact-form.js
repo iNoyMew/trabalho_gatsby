@@ -1,156 +1,103 @@
-import * as React from "react"
-import "../styles/contact.css"
+import React, { useState } from "react";
+import "../styles/contact.css";
 
-const ContactForm = () => {
-  const [formData, setFormData] = React.useState({
-    name: "",
-    email: "",
-    message: "",
-  })
-
-  const [errors, setErrors] = React.useState({})
-  const [isSubmitting, setIsSubmitting] = React.useState(false)
-  const [submitSuccess, setSubmitSuccess] = React.useState(false)
-
-  const validateEmail = (email) => {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    return re.test(email)
-  }
+export default function ContactForm() {
+  const [values, setValues] = useState({ name: "", email: "", message: "" });
+  const [errors, setErrors] = useState({});
+  const [submitting, setSubmitting] = useState(false);
 
   const validate = () => {
-    const newErrors = {}
-
-    if (!formData.name.trim()) {
-      newErrors.name = "O nome é obrigatório"
-    } else if (formData.name.trim().length < 3) {
-      newErrors.name = "O nome deve ter pelo menos 3 caracteres"
+    const errs = {};
+    if (!values.name || values.name.trim().length < 2) {
+      errs.name = "Nome deve ter ao menos 2 caracteres.";
     }
-
-    if (!formData.email.trim()) {
-      newErrors.email = "O email é obrigatório"
-    } else if (!validateEmail(formData.email)) {
-      newErrors.email = "Por favor, insira um email válido"
+    if (!values.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) {
+      errs.email = "Email inválido.";
     }
-
-    if (!formData.message.trim()) {
-      newErrors.message = "A mensagem é obrigatória"
-    } else if (formData.message.trim().length < 10) {
-      newErrors.message = "A mensagem deve ter pelo menos 10 caracteres"
+    if (!values.message || values.message.trim().length < 10) {
+      errs.message = "Mensagem deve ter ao menos 10 caracteres.";
     }
-
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
+    return errs;
+  };
 
   const handleChange = (e) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }))
-    // Limpar erro do campo quando o usuário começar a digitar
-    if (errors[name]) {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: "",
-      }))
+    setValues({ ...values, [e.target.name]: e.target.value });
+    setErrors({ ...errors, [e.target.name]: undefined });
+  };
+
+  const handleSubmit = (e) => {
+    const errs = validate();
+    if (Object.keys(errs).length > 0) {
+      e.preventDefault(); // bloqueia envio para Netlify se houver erro
+      setErrors(errs);
+      return;
     }
-  }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-
-    if (!validate()) {
-      return
-    }
-
-    setIsSubmitting(true)
-
-    try {
-      // Simular envio para backend (substitua pela sua URL real)
-      const response = await fetch("https://api.exemplo.com/contato", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      })
-
-      // Como o endpoint não existe, sempre cairá no catch
-      // Mas mantemos o código para quando implementar de verdade
-      if (response.ok) {
-        setSubmitSuccess(true)
-        setFormData({ name: "", email: "", message: "" })
-        setTimeout(() => setSubmitSuccess(false), 5000)
-      }
-    } catch (error) {
-      // Para fins de demonstração, consideramos sucesso mesmo se o endpoint não existir
-      console.log("Endpoint não disponível, mas dados validados:", formData)
-      setSubmitSuccess(true)
-      setFormData({ name: "", email: "", message: "" })
-      setTimeout(() => setSubmitSuccess(false), 5000)
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
+    // se válido, deixa o formulário submeter normalmente (Netlify Forms processará)
+    setSubmitting(true);
+    // não chamar fetch/axios aqui; o envio padrão do formulário é usado
+  };
 
   return (
-    <form className="contact-form-container" onSubmit={handleSubmit} noValidate>
-      <h2 className="form-title">Entre em Contato</h2>
+    <form
+      name="contact"
+      method="POST"
+      data-netlify="true"
+      data-netlify-honeypot="bot-field"
+      action="/thanks"
+      onSubmit={handleSubmit}
+      className="contact-form"
+    >
+      {/* Campo necessário para Netlify identificar o form */}
+      <input type="hidden" name="form-name" value="contact" />
 
-      {submitSuccess && (
-        <div className="success-message">
-          Mensagem enviada com sucesso! Entraremos em contato em breve.
-        </div>
-      )}
+      {/* Honeypot anti-bot */}
+      <p style={{ display: "none" }}>
+        <label>
+          Não preencha este campo:{" "}
+          <input name="bot-field" onChange={handleChange} />
+        </label>
+      </p>
 
-      <div className="form-group">
-        <label htmlFor="name" className="form-label">Nome *</label>
+      <label>
+        Nome
         <input
           type="text"
-          id="name"
           name="name"
-          value={formData.name}
+          value={values.name}
           onChange={handleChange}
-          className={`form-input ${errors.name ? "error" : ""}`}
-          placeholder="Seu nome completo"
+          required
         />
-        {errors.name && <span className="error-message">{errors.name}</span>}
-      </div>
+        {errors.name && <span className="error">{errors.name}</span>}
+      </label>
 
-      <div className="form-group">
-        <label htmlFor="email" className="form-label">Email *</label>
+      <label>
+        Email
         <input
           type="email"
-          id="email"
           name="email"
-          value={formData.email}
+          value={values.email}
           onChange={handleChange}
-          className={`form-input ${errors.email ? "error" : ""}`}
-          placeholder="seu@email.com"
+          required
         />
-        {errors.email && <span className="error-message">{errors.email}</span>}
-      </div>
+        {errors.email && <span className="error">{errors.email}</span>}
+      </label>
 
-      <div className="form-group">
-        <label htmlFor="message" className="form-label">Mensagem *</label>
+      <label>
+        Mensagem
         <textarea
-          id="message"
           name="message"
-          value={formData.message}
+          rows="6"
+          value={values.message}
           onChange={handleChange}
-          className={`form-textarea ${errors.message ? "error" : ""}`}
-          placeholder="Sua mensagem..."
+          required
         />
-        {errors.message && <span className="error-message">{errors.message}</span>}
-      </div>
+        {errors.message && <span className="error">{errors.message}</span>}
+      </label>
 
-      <button type="submit" className="submit-button" disabled={isSubmitting}>
-        {isSubmitting ? "Enviando..." : "Enviar Mensagem"}
+      <button type="submit" disabled={submitting}>
+        {submitting ? "Enviando..." : "Enviar"}
       </button>
     </form>
-  )
+  );
 }
-
-export default ContactForm
 

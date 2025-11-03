@@ -7,7 +7,6 @@ import Seo from "../components/seo"
 import "../styles/home.css"
 
 const IndexPage = ({ data }) => {
-  // Verificação de segurança caso data seja undefined
   if (!data || !data.posts || !data.noticias || !data.projetos) {
     return (
       <Layout>
@@ -23,14 +22,13 @@ const IndexPage = ({ data }) => {
   const noticias = data.noticias.nodes || []
   const projetos = data.projetos.nodes || []
 
-  // Combinar todos os conteúdos e ordenar por data
   const allContent = [
     ...posts.map(p => ({ ...p, type: 'post', basePath: '/posts' })),
     ...noticias.map(n => ({ ...n, type: 'noticia', basePath: '/noticias' })),
     ...projetos.map(pr => ({ ...pr, type: 'projeto', basePath: '/projetos' })),
   ]
     .sort((a, b) => new Date(b.frontmatter.date) - new Date(a.frontmatter.date))
-    .slice(0, 20) // Últimos 20
+    .slice(0, 20)
 
   const getSlug = (node) => {
     return node.fields?.slug || 

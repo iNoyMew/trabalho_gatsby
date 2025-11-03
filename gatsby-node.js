@@ -1,23 +1,11 @@
-/**
- * Implement Gatsby's Node APIs in this file.
- *
- * See: https://www.gatsbyjs.com/docs/reference/config-files/gatsby-node/
- */
-
 const path = require("path")
 
-/**
- * @type {import('gatsby').GatsbyNode['createPages']}
- */
 exports.createPages = async ({ graphql, actions, reporter }) => {
   const { createPage } = actions
 
-  // Templates
   const postTemplate = path.resolve(`./src/templates/post.js`)
   const noticiaTemplate = path.resolve(`./src/templates/noticia.js`)
   const projetoTemplate = path.resolve(`./src/templates/projeto.js`)
-
-  // Query para posts
   const postsResult = await graphql(`
     query {
       allMarkdownRemark(
@@ -37,7 +25,6 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     }
   `)
 
-  // Query para notícias
   const noticiasResult = await graphql(`
     query {
       allMarkdownRemark(
@@ -57,7 +44,6 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     }
   `)
 
-  // Query para projetos
   const projetosResult = await graphql(`
     query {
       allMarkdownRemark(
@@ -96,7 +82,6 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   const noticias = noticiasResult.data.allMarkdownRemark.nodes
   const projetos = projetosResult.data.allMarkdownRemark.nodes
 
-  // Criar páginas para posts
   posts.forEach((node) => {
     const slug = node.fields?.slug || 
       node.frontmatter.title
@@ -113,7 +98,6 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     })
   })
 
-  // Criar páginas para notícias
   noticias.forEach((node) => {
     const slug = node.fields?.slug || 
       node.frontmatter.title
@@ -130,7 +114,6 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     })
   })
 
-  // Criar páginas para projetos
   projetos.forEach((node) => {
     const slug = node.fields?.slug || 
       node.frontmatter.title
@@ -148,17 +131,13 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   })
 }
 
-/**
- * Cria campos slug a partir do nome do arquivo
- */
+
 exports.onCreateNode = ({ node, actions, getNode }) => {
   const { createNodeField } = actions
 
   if (node.internal.type === `MarkdownRemark`) {
     const fileNode = getNode(node.parent)
     const filePath = fileNode.relativePath
-    
-    // Extrair o nome do arquivo sem extensão
     const fileName = filePath.replace(/\.[^/.]+$/, '')
     
     createNodeField({
